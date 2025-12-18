@@ -4,6 +4,13 @@ const bodyParser = require('body-parser');
 const fs = require('fs').promises;
 const path = require('path');
 const { v4: uuidv4 } = require('uuid');
+const {
+  getAllContracts,
+  getBlockTypes,
+  getBlockContract,
+  validateBlockData,
+  getDefaultBlockData
+} = require('./contracts');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -154,6 +161,20 @@ app.get('/api/pages/id/:id', async (req, res) => {
 // Создать страницу
 app.post('/api/pages', async (req, res) => {
   try {
+    // Валидация блоков
+    if (req.body.blocks && Array.isArray(req.body.blocks)) {
+      for (const block of req.body.blocks) {
+        const validation = validateBlockData(block.type, block.data || {});
+        if (!validation.valid) {
+          return res.status(400).json({
+            error: 'Block validation failed',
+            blockType: block.type,
+            errors: validation.errors
+          });
+        }
+      }
+    }
+
     const data = await fs.readFile(PAGES_FILE, 'utf8');
     const pages = JSON.parse(data);
     const newPage = {
@@ -173,6 +194,20 @@ app.post('/api/pages', async (req, res) => {
 // Обновить страницу
 app.put('/api/pages/:id', async (req, res) => {
   try {
+    // Валидация блоков
+    if (req.body.blocks && Array.isArray(req.body.blocks)) {
+      for (const block of req.body.blocks) {
+        const validation = validateBlockData(block.type, block.data || {});
+        if (!validation.valid) {
+          return res.status(400).json({
+            error: 'Block validation failed',
+            blockType: block.type,
+            errors: validation.errors
+          });
+        }
+      }
+    }
+
     const data = await fs.readFile(PAGES_FILE, 'utf8');
     const pages = JSON.parse(data);
     const index = pages.pages.findIndex(p => p.id === req.params.id);
@@ -204,6 +239,25 @@ app.delete('/api/pages/:id', async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
+});
+
+// Получить все контракты блоков
+app.get('/api/contracts', (req, res) => {
+  res.json(getAllContracts());
+});
+
+// Получить контракт для конкретного типа блока
+app.get('/api/contracts/:blockType', (req, res) => {
+  const contract = getBlockContract(req.params.blockType);
+  if (!contract) {
+    return res.status(404).json({ error: 'Contract not found' });
+  }
+  res.json(contract);
+});
+
+// Получить список доступных типов блоков
+app.get('/api/block-types', (req, res) => {
+  res.json(getBlockTypes());
 });
 
 // Health check

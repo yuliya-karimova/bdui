@@ -55,6 +55,15 @@ app.get('/api/page/:slug?', async (req, res) => {
             description: card.description,
             imageUrl: card.imageUrl
           }))
+        }),
+        ...(block.type === 'gallery' && {
+          title: block.data.title,
+          images: block.data.images.map(image => ({
+            id: image.id,
+            url: image.url,
+            alt: image.alt,
+            caption: image.caption
+          }))
         })
       }))
     };
@@ -82,6 +91,39 @@ app.get('/api/pages', async (req, res) => {
     }));
     
     res.json(navigationPages);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Получить все контракты блоков
+app.get('/api/contracts', async (req, res) => {
+  try {
+    const response = await axios.get(`${BACKEND_URL}/api/contracts`);
+    res.json(response.data);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Получить контракт для конкретного типа блока
+app.get('/api/contracts/:blockType', async (req, res) => {
+  try {
+    const response = await axios.get(`${BACKEND_URL}/api/contracts/${req.params.blockType}`);
+    res.json(response.data);
+  } catch (error) {
+    if (error.response && error.response.status === 404) {
+      return res.status(404).json({ error: 'Contract not found' });
+    }
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Получить список доступных типов блоков
+app.get('/api/block-types', async (req, res) => {
+  try {
+    const response = await axios.get(`${BACKEND_URL}/api/block-types`);
+    res.json(response.data);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

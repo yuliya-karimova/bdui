@@ -87,12 +87,28 @@ function PageEditor() {
   });
   const [loading, setLoading] = React.useState(!!id);
   const [saving, setSaving] = React.useState(false);
+  const [contracts, setContracts] = React.useState({});
+  const [blockTypes, setBlockTypes] = React.useState([]);
 
   React.useEffect(() => {
+    fetchContracts();
     if (id) {
       fetchPage();
     }
   }, [id]);
+
+  const fetchContracts = async () => {
+    try {
+      const [contractsRes, typesRes] = await Promise.all([
+        axios.get(`${BACKEND_URL}/api/contracts`),
+        axios.get(`${BACKEND_URL}/api/block-types`)
+      ]);
+      setContracts(contractsRes.data);
+      setBlockTypes(typesRes.data);
+    } catch (error) {
+      console.error('Error fetching contracts:', error);
+    }
+  };
 
   const fetchPage = async () => {
     try {
@@ -115,17 +131,22 @@ function PageEditor() {
       }
       navigate('/');
     } catch (error) {
-      alert('Ошибка при сохранении');
+      const errorMsg = error.response?.data?.errors 
+        ? `Ошибки валидации:\n${error.response.data.errors.join('\n')}`
+        : 'Ошибка при сохранении';
+      alert(errorMsg);
     } finally {
       setSaving(false);
     }
   };
 
   const addBlock = (type) => {
+    const contract = contracts[type];
+    const defaultData = contract ? getDefaultBlockDataFromContract(contract) : {};
     const newBlock = {
       id: `block-${Date.now()}`,
       type,
-      data: getDefaultBlockData(type)
+      data: defaultData
     };
     setPage({ ...page, blocks: [...page.blocks, newBlock] });
   };
@@ -184,9 +205,16 @@ function PageEditor() {
         <div className="blocks-section">
           <h2>Блоки</h2>
           <div className="add-blocks">
-            <button onClick={() => addBlock('text')} className="btn btn-secondary">+ Текстовый блок</button>
-            <button onClick={() => addBlock('cards')} className="btn btn-secondary">+ Блок с карточками</button>
-            <button onClick={() => addBlock('banner')} className="btn btn-secondary">+ Баннер</button>
+            {blockTypes.map(blockType => (
+              <button
+                key={blockType.type}
+                onClick={() => addBlock(blockType.type)}
+                className="btn btn-secondary"
+                title={blockType.description}
+              >
+                + {blockType.name}
+              </button>
+            ))}
           </div>
 
           <div className="blocks-list">
@@ -195,6 +223,7 @@ function PageEditor() {
                 key={block.id}
                 block={block}
                 index={index}
+                contract={contracts[block.type]}
                 onUpdate={(data) => updateBlock(block.id, data)}
                 onRemove={() => removeBlock(block.id)}
                 onMove={(direction) => moveBlock(index, direction)}
@@ -209,10 +238,16 @@ function PageEditor() {
   );
 }
 
-function BlockEditor({ block, index, onUpdate, onRemove, onMove, canMoveUp, canMoveDown }) {
+function BlockEditor({ block, index, contract, onUpdate, onRemove, onMove, canMoveUp, canMoveDown }) {
   const [expanded, setExpanded] = React.useState(true);
 
   const renderEditor = () => {
+    // Если есть контракт, используем его для генерации формы
+    if (contract) {
+      return <ContractBasedEditor block={block} contract={contract} onUpdate={onUpdate} />;
+    }
+    
+    // Fallback на старый способ для обратной совместимости
     switch (block.type) {
       case 'text':
         return (
@@ -367,7 +402,7 @@ function BlockEditor({ block, index, onUpdate, onRemove, onMove, canMoveUp, canM
   return (
     <div className="block-editor">
       <div className="block-header">
-        <span className="block-type">{getBlockTypeName(block.type)}</span>
+        <span className="block-type">{contract ? contract.name : getBlockTypeName(block.type)}</span>
         <div className="block-actions">
           {canMoveUp && <button onClick={() => onMove('up')} className="btn-icon">↑</button>}
           {canMoveDown && <button onClick={() => onMove('down')} className="btn-icon">↓</button>}
@@ -382,7 +417,116 @@ function BlockEditor({ block, index, onUpdate, onRemove, onMove, canMoveUp, canM
   );
 }
 
-function getBlockTypeName(type) {
+// Компонент для генерации формы на основе контракта
+function ContractBasedEditor({ block, contract, onUpdate }) {
+  const renderField = (field, value, onChange, path = '') => {
+    const fieldPath = path ? `${path}.${field.name}` : field.name;
+    const fieldValue = path ? value : (block.data[field.name] || '');
+
+    if (field.type === 'array' && field.itemSchema) {
+      return (
+        <div key={field.name} className="array-field">
+          <h4>{field.label}</h4>
+          {(Array.isArray(block.data[field.name]) ? block.data[field.name] : []).map((item, itemIndex) => (
+            <div key={item.id || itemIndex} className="array-item-editor">
+              {field.itemSchema.fields.map(itemField => {
+                const itemValue = item[itemField.name] || '';
+                return (
+                  <div key={itemField.name} className="form-group">
+                    <label>
+                      {itemField.label}
+                      {itemField.required && <span className="required">*</span>}
+                    </label>
+                    {itemField.type === 'textarea' ? (
+                      <textarea
+                        value={itemValue}
+                        onChange={(e) => {
+                          const newArray = [...block.data[field.name]];
+                          newArray[itemIndex] = { ...item, [itemField.name]: e.target.value };
+                          onUpdate({ [field.name]: newArray });
+                        }}
+                        placeholder={itemField.placeholder}
+                        rows={itemField.rows || 3}
+                      />
+                    ) : (
+                      <input
+                        type={itemField.type === 'url' ? 'url' : 'text'}
+                        value={itemValue}
+                        onChange={(e) => {
+                          const newArray = [...block.data[field.name]];
+                          newArray[itemIndex] = { ...item, [itemField.name]: e.target.value };
+                          onUpdate({ [field.name]: newArray });
+                        }}
+                        placeholder={itemField.placeholder}
+                      />
+                    )}
+                  </div>
+                );
+              })}
+              <button
+                onClick={() => {
+                  const newArray = block.data[field.name].filter((_, i) => i !== itemIndex);
+                  onUpdate({ [field.name]: newArray });
+                }}
+                className="btn btn-danger btn-sm"
+              >
+                Удалить элемент
+              </button>
+            </div>
+          ))}
+          <button
+            onClick={() => {
+              const newItem = { id: `${field.name}-${Date.now()}` };
+              field.itemSchema.fields.forEach(itemField => {
+                newItem[itemField.name] = '';
+              });
+              const currentArray = block.data[field.name] || [];
+              onUpdate({ [field.name]: [...currentArray, newItem] });
+            }}
+            className="btn btn-secondary"
+          >
+            + Добавить элемент
+          </button>
+        </div>
+      );
+    }
+
+    return (
+      <div key={field.name} className="form-group">
+        <label>
+          {field.label}
+          {field.required && <span className="required">*</span>}
+        </label>
+        {field.type === 'textarea' ? (
+          <textarea
+            value={fieldValue}
+            onChange={(e) => onUpdate({ [field.name]: e.target.value })}
+            placeholder={field.placeholder}
+            rows={field.rows || 5}
+          />
+        ) : (
+          <input
+            type={field.type === 'url' ? 'url' : 'text'}
+            value={fieldValue}
+            onChange={(e) => onUpdate({ [field.name]: e.target.value })}
+            placeholder={field.placeholder}
+          />
+        )}
+      </div>
+    );
+  };
+
+  return (
+    <>
+      {contract.fields.map(field => renderField(field))}
+    </>
+  );
+}
+
+function getBlockTypeName(type, contracts = {}) {
+  if (contracts[type]) {
+    return contracts[type].name;
+  }
   const names = {
     text: 'Текстовый блок',
     cards: 'Блок с карточками',
@@ -402,6 +546,18 @@ function getDefaultBlockData(type) {
     default:
       return {};
   }
+}
+
+function getDefaultBlockDataFromContract(contract) {
+  const defaultData = {};
+  contract.fields.forEach(field => {
+    if (field.type === 'array') {
+      defaultData[field.name] = [];
+    } else {
+      defaultData[field.name] = '';
+    }
+  });
+  return defaultData;
 }
 
 export default App;

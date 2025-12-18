@@ -270,3 +270,28 @@
   color: #666;
 }
 
+.required {
+  color: #e74c3c;
+  margin-left: 0.25rem;
+}
+
+.array-field {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 4px;
+}
+
+.array-field h4 {
+  margin-bottom: 1rem;
+  color: #2c3e50;
+}
+
+.array-item-editor {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  background: white;
+}
+

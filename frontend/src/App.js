@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, useParams } from 'react-router-dom';
 import axios from 'axios';
+import BlockRenderer from './blocks/BlockRenderer';
 import './App.css';
 
 const BFF_URL = process.env.REACT_APP_BFF_URL || 'http://localhost:3002';
@@ -83,69 +84,6 @@ function PageView() {
   );
 }
 
-function BlockRenderer({ block }) {
-  switch (block.type) {
-    case 'text':
-      return <TextBlock block={block} />;
-    case 'cards':
-      return <CardsBlock block={block} />;
-    case 'banner':
-      return <BannerBlock block={block} />;
-    default:
-      return null;
-  }
-}
-
-function TextBlock({ block }) {
-  return (
-    <section className="block text-block">
-      <div className="container">
-        <h2>{block.title}</h2>
-        <div className="content" dangerouslySetInnerHTML={{ __html: block.content.replace(/\n/g, '<br />') }} />
-      </div>
-    </section>
-  );
-}
-
-function CardsBlock({ block }) {
-  return (
-    <section className="block cards-block">
-      <div className="container">
-        <h2>{block.title}</h2>
-        <div className="cards-grid">
-          {block.cards.map(card => (
-            <div key={card.id} className="card">
-              <img src={card.imageUrl} alt={card.title} />
-              <h3>{card.title}</h3>
-              <p>{card.description}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function BannerBlock({ block }) {
-  return (
-    <section className="block banner-block">
-      <div className="banner-content">
-        <img src={block.imageUrl} alt={block.title} className="banner-image" />
-        <div className="banner-overlay">
-          <div className="container">
-            <h1>{block.title}</h1>
-            {block.subtitle && <p className="subtitle">{block.subtitle}</p>}
-            {block.buttonText && (
-              <a href={block.buttonLink} className="banner-button">
-                {block.buttonText}
-              </a>
-            )}
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
 
 export default App;
 
