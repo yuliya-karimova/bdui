@@ -1,0 +1,62 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3001"
+    environment:
+      - PORT=3001
+      - NODE_ENV=production
+    volumes:
+      - ./backend/data:/app/data
+    networks:
+      - bdui-network
+
+  bff:
+    build:
+      context: ./bff
+      dockerfile: Dockerfile
+    ports:
+      - "3002:3002"
+    environment:
+      - PORT=3002
+      - BACKEND_URL=http://backend:3001
+      - NODE_ENV=production
+    depends_on:
+      - backend
+    networks:
+      - bdui-network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    environment:
+      - REACT_APP_BFF_URL=http://localhost:3002
+    depends_on:
+      - bff
+    networks:
+      - bdui-network
+
+  admin:
+    build:
+      context: ./admin
+      dockerfile: Dockerfile
+    ports:
+      - "3003:80"
+    environment:
+      - REACT_APP_BACKEND_URL=http://localhost:3001
+    depends_on:
+      - backend
+    networks:
+      - bdui-network
+
+networks:
+  bdui-network:
+    driver: bridge
+

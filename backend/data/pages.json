@@ -1,0 +1,124 @@
+{
+  "pages": [
+    {
+      "id": "home",
+      "title": "Главная страница",
+      "slug": "/",
+      "blocks": [
+        {
+          "id": "3f5e26fb-16b0-4760-90d0-0ed661aea043",
+          "type": "banner",
+          "data": {
+            "title": "Добро пожаловать!",
+            "subtitle": "Backend Driven UI Demo",
+            "imageUrl": "https://t4.ftcdn.net/jpg/02/66/97/53/360_F_266975387_CVK7jWI9dSoL4owOzrw9wSElynS7bgRe.jpg",
+            "buttonText": "Узнать больше",
+            "buttonLink": "#about"
+          }
+        },
+        {
+          "id": "9c20cf43-acab-4e5c-b153-abf5ee10941d",
+          "type": "text",
+          "data": {
+            "title": "О проекте",
+            "content": "Это демонстрационное приложение показывает возможности Backend Driven UI. Контент страницы управляется через бэкенд и может быть изменен без пересборки фронтенда."
+          }
+        },
+        {
+          "id": "25a37f7d-0cc6-4d50-b195-6df643faccb2",
+          "type": "cards",
+          "data": {
+            "title": "Наши возможности",
+            "cards": [
+              {
+                "id": "b637e78c-6fcb-4e72-9d79-e5d0a73d0da8",
+                "title": "Динамический контент",
+                "description": "Контент управляется через бэкенд",
+                "imageUrl": "https://media.proglib.io/posts/2021/02/24/5ccab15a3f7623fe3283f1907fd3cd2d.webp"
+              },
+              {
+                "id": "96848470-980a-4cf0-90bc-b4c291096ce6",
+                "title": "Гибкая настройка",
+                "description": "Легко добавлять и изменять блоки",
+                "imageUrl": "https://static.tildacdn.com/tild3831-3535-4932-a662-656464333136/templates2.jpg"
+              },
+              {
+                "id": "ad39e45c-9d88-4db7-84cf-34e27a8b4ac2",
+                "title": "Быстрое обновление",
+                "description": "Изменения применяются мгновенно",
+                "imageUrl": "https://daily.wordreference.com/wp-content/uploads/2017/04/fast.jpg"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "8b39ff00-500b-441f-aeb9-8c6caf37ea20",
+      "title": "info",
+      "slug": "/info",
+      "blocks": [
+        {
+          "id": "block-1766095488013",
+          "type": "text",
+          "data": {
+            "title": "Привет",
+            "content": ""
+          }
+        }
+      ]
+    },
+    {
+      "id": "5097f013-fe59-410a-bc1a-7d4b4485d668",
+      "title": "hello",
+      "slug": "/hello",
+      "blocks": [
+        {
+          "id": "block-1766096046050",
+          "type": "text",
+          "data": {
+            "title": "Привет! Я новый текстовый блок!",
+            "content": "Ты сюда можешь писать всё, что хочешь )"
+          }
+        },
+        {
+          "id": "block-1766096068378",
+          "type": "banner",
+          "data": {
+            "title": "Мой лучший баннер",
+            "subtitle": "Подзаголовок мечты",
+            "imageUrl": "https://t4.ftcdn.net/jpg/02/56/10/07/360_F_256100731_qNLp6MQ3FjYtA3Freu9epjhsAj2cwU9c.jpg",
+            "buttonText": "Перейти",
+            "buttonLink": "/info"
+          }
+        }
+      ]
+    },
+    {
+      "id": "e37c2c8e-1922-47b1-af50-fcacf2b00dbe",
+      "title": "vika",
+      "slug": "/vika",
+      "blocks": [
+        {
+          "id": "block-1766096377103",
+          "type": "text",
+          "data": {
+            "title": "Привет! Это лучшая страница на свете",
+            "content": "трууурру"
+          }
+        },
+        {
+          "id": "block-1766096398353",
+          "type": "banner",
+          "data": {
+            "title": "Лучший баннер",
+            "subtitle": "Заголовок мечты",
+            "imageUrl": "https://t4.ftcdn.net/jpg/02/56/10/07/360_F_256100731_qNLp6MQ3FjYtA3Freu9epjhsAj2cwU9c.jpg",
+            "buttonText": "Перейти",
+            "buttonLink": "/"
+          }
+        }
+      ]
+    }
+  ]
+}
