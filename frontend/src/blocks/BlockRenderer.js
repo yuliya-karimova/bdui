@@ -5,6 +5,8 @@ import BannerBlock from './BannerBlock';
 import GalleryBlock from './GalleryBlock';
 
 function BlockRenderer({ block }) {
+  if (block.hidden) return null;
+
   switch (block.type) {
     case 'text':
       return <TextBlock block={block} />;

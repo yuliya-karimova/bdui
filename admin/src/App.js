@@ -146,7 +146,8 @@ function PageEditor() {
     const newBlock = {
       id: `block-${Date.now()}`,
       type,
-      data: defaultData
+      data: defaultData,
+      hidden: false
     };
     setPage({ ...page, blocks: [...page.blocks, newBlock] });
   };
@@ -225,6 +226,12 @@ function PageEditor() {
                 index={index}
                 contract={contracts[block.type]}
                 onUpdate={(data) => updateBlock(block.id, data)}
+                onToggleHidden={(hidden) => {
+                  setPage({
+                    ...page,
+                    blocks: page.blocks.map(b => b.id === block.id ? { ...b, hidden } : b)
+                  });
+                }}
                 onRemove={() => removeBlock(block.id)}
                 onMove={(direction) => moveBlock(index, direction)}
                 canMoveUp={index > 0}
@@ -238,7 +245,7 @@ function PageEditor() {
   );
 }
 
-function BlockEditor({ block, index, contract, onUpdate, onRemove, onMove, canMoveUp, canMoveDown }) {
+function BlockEditor({ block, index, contract, onUpdate, onToggleHidden, onRemove, onMove, canMoveUp, canMoveDown }) {
   const [expanded, setExpanded] = React.useState(true);
 
   const renderEditor = () => {
@@ -404,6 +411,14 @@ function BlockEditor({ block, index, contract, onUpdate, onRemove, onMove, canMo
       <div className="block-header">
         <span className="block-type">{contract ? contract.name : getBlockTypeName(block.type)}</span>
         <div className="block-actions">
+          <label className="hide-toggle">
+            <input
+              type="checkbox"
+              checked={!!block.hidden}
+              onChange={(e) => onToggleHidden(e.target.checked)}
+            />
+            Скрыть
+          </label>
           {canMoveUp && <button onClick={() => onMove('up')} className="btn-icon">↑</button>}
           {canMoveDown && <button onClick={() => onMove('down')} className="btn-icon">↓</button>}
           <button onClick={() => setExpanded(!expanded)} className="btn-icon">

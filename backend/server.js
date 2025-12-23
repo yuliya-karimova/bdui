@@ -124,6 +124,25 @@ app.get('/api/pages/root', async (req, res) => {
   }
 });
 
+// Подставляем данные для promoBanner перед отдачей страницы
+function applyPromoBannerData(page) {
+  if (!page || !page.blocks) return page;
+  return {
+    ...page,
+    blocks: page.blocks.map(block => {
+      if (block.type === 'promoBanner') {
+        return {
+          ...block,
+          data: {
+            ...(block.data || {})
+          }
+        };
+      }
+      return block;
+    })
+  };
+}
+
 // Получить страницу по slug
 app.get('/api/pages/:slug', async (req, res) => {
   try {
@@ -137,7 +156,7 @@ app.get('/api/pages/:slug', async (req, res) => {
     if (!page) {
       return res.status(404).json({ error: 'Page not found' });
     }
-    res.json(page);
+    res.json(applyPromoBannerData(page));
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -152,7 +171,7 @@ app.get('/api/pages/id/:id', async (req, res) => {
     if (!page) {
       return res.status(404).json({ error: 'Page not found' });
     }
-    res.json(page);
+    res.json(applyPromoBannerData(page));
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

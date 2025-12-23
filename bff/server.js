@@ -9,6 +9,16 @@ const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:3001';
 app.use(cors());
 app.use(express.json());
 
+// Состояние баннера, которое можно править на BFF.
+// Используется как дефолт, если с бэка пришёл пустой блок banner.
+const BFF_BANNER_STATE = {
+  title: 'BFF Banner',
+  subtitle: 'Стейт задаётся на BFF',
+  imageUrl: 'https://image.slidesdocs.com/responsive-images/background/web-development-and-app-programming-with-seo-friendly-design-on-computer-powerpoint-background_8ad84ff8f9__960_540.jpg',
+  buttonText: 'Подробнее',
+  buttonLink: '/info'
+};
+
 // Получить страницу по slug (оптимизированная версия для фронтенда)
 app.get('/api/page/:slug?', async (req, res) => {
   try {
@@ -35,17 +45,19 @@ app.get('/api/page/:slug?', async (req, res) => {
       blocks: page.blocks.map(block => ({
         id: block.id,
         type: block.type,
+        hidden: !!block.hidden,
         // Нормализуем структуру данных в зависимости от типа блока
         ...(block.type === 'text' && {
           title: block.data.title,
           content: block.data.content
         }),
         ...(block.type === 'banner' && {
-          title: block.data.title,
-          subtitle: block.data.subtitle,
-          imageUrl: block.data.imageUrl,
-          buttonText: block.data.buttonText,
-          buttonLink: block.data.buttonLink
+          ...block.data
+        }),
+        ...(block.type === 'promoBanner' && {
+          // promoBanner мапится на фронтовый banner, данные приходят с бэка
+          type: 'banner',
+          ...BFF_BANNER_STATE
         }),
         ...(block.type === 'cards' && {
           title: block.data.title,

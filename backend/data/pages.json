@@ -14,7 +14,8 @@
             "imageUrl": "https://t4.ftcdn.net/jpg/02/66/97/53/360_F_266975387_CVK7jWI9dSoL4owOzrw9wSElynS7bgRe.jpg",
             "buttonText": "Узнать больше",
             "buttonLink": "#about"
-          }
+          },
+          "hidden": false
         },
         {
           "id": "9c20cf43-acab-4e5c-b153-abf5ee10941d",
@@ -23,6 +24,18 @@
             "title": "О проекте",
             "content": "Это демонстрационное приложение показывает возможности Backend Driven UI. Контент страницы управляется через бэкенд и может быть изменен без пересборки фронтенда."
           }
+        },
+        {
+          "id": "block-1766499574387",
+          "type": "promoBanner",
+          "data": {
+            "title": "Промо баннер (авто)",
+            "subtitle": "Данные приходят с бэка",
+            "imageUrl": "https://image.slidesdocs.com/responsive-images/background/web-development-and-app-programming-with-seo-friendly-design-on-computer-powerpoint-background_8ad84ff8f9__960_540.jpg",
+            "buttonText": "Купить",
+            "buttonLink": "/buy"
+          },
+          "hidden": false
         },
         {
           "id": "25a37f7d-0cc6-4d50-b195-6df643faccb2",
@@ -50,6 +63,12 @@
               }
             ]
           }
+        },
+        {
+          "id": "block-1766499957561",
+          "type": "promoBanner",
+          "data": {},
+          "hidden": false
         }
       ]
     },

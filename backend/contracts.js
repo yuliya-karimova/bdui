@@ -162,6 +162,15 @@ const blockContracts = {
         }
       }
     ]
+  },
+
+  promoBanner: {
+    type: 'promoBanner',
+    name: 'Promo Banner',
+    description: 'Баннер с данными с бэка, без ручных настроек',
+    fields: [
+      // Нет настраиваемых полей: данные приходят с бэка автоматически
+    ]
   }
 };
 

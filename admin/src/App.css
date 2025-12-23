@@ -270,6 +270,15 @@
   color: #666;
 }
 
+.hide-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.9rem;
+  color: #555;
+  margin-right: 0.5rem;
+}
+
 .required {
   color: #e74c3c;
   margin-left: 0.25rem;
