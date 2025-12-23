@@ -164,6 +164,61 @@ const blockContracts = {
     ]
   },
 
+  buttons: {
+    type: 'buttons',
+    name: 'Блок с кнопками',
+    description: 'Блок с несколькими кнопками и ссылками',
+    fields: [
+      {
+        name: 'title',
+        label: 'Заголовок (необязательно)',
+        type: 'text',
+        required: false,
+        placeholder: 'Введите заголовок'
+      },
+      {
+        name: 'description',
+        label: 'Описание (необязательно)',
+        type: 'textarea',
+        required: false,
+        placeholder: 'Введите описание',
+        rows: 3
+      },
+      {
+        name: 'buttons',
+        label: 'Кнопки',
+        type: 'array',
+        required: true,
+        itemSchema: {
+          type: 'object',
+          fields: [
+            {
+              name: 'text',
+              label: 'Текст кнопки',
+              type: 'text',
+              required: true,
+              placeholder: 'Например: Купить, Подробнее'
+            },
+            {
+              name: 'link',
+              label: 'Ссылка',
+              type: 'text',
+              required: true,
+              placeholder: 'Например: /buy, /info, https://example.com'
+            },
+            {
+              name: 'style',
+              label: 'Стиль кнопки',
+              type: 'text',
+              required: false,
+              placeholder: 'primary, secondary, danger (по умолчанию: primary)'
+            }
+          ]
+        }
+      }
+    ]
+  },
+
   promoBanner: {
     type: 'promoBanner',
     name: 'Promo Banner',

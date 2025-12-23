@@ -13,7 +13,30 @@
             "subtitle": "Backend Driven UI Demo",
             "imageUrl": "https://t4.ftcdn.net/jpg/02/66/97/53/360_F_266975387_CVK7jWI9dSoL4owOzrw9wSElynS7bgRe.jpg",
             "buttonText": "Узнать больше",
-            "buttonLink": "#about"
+            "buttonLink": "/info"
+          },
+          "hidden": false
+        },
+        {
+          "id": "block-1766502541124",
+          "type": "buttons",
+          "data": {
+            "title": "",
+            "description": "",
+            "buttons": [
+              {
+                "id": "buttons-1766502556074",
+                "text": "info",
+                "link": "/info",
+                "style": "primary"
+              },
+              {
+                "id": "buttons-1766502614992",
+                "text": "hello",
+                "link": "/hello",
+                "style": "secondary"
+              }
+            ]
           },
           "hidden": false
         },

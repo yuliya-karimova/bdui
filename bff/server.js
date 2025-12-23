@@ -101,6 +101,16 @@ app.get('/api/page/:slug?', async (req, res) => {
             alt: image.alt,
             caption: image.caption
           }))
+        }),
+        ...(block.type === 'buttons' && {
+          title: block.data.title,
+          description: block.data.description,
+          buttons: block.data.buttons.map(button => ({
+            id: button.id,
+            text: button.text,
+            link: button.link,
+            style: button.style
+          }))
         })
       }))
     };

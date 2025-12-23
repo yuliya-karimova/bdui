@@ -217,6 +217,78 @@
   font-size: 0.9rem;
 }
 
+.buttons-block h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  text-align: center;
+  color: #2c3e50;
+}
+
+.buttons-description {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #666;
+  font-size: 1.1rem;
+  line-height: 1.8;
+}
+
+.buttons-description p {
+  margin-bottom: 0.5rem;
+}
+
+.buttons-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.buttons-list .btn {
+  padding: 12px 30px;
+  text-decoration: none;
+  border-radius: 5px;
+  font-size: 1.1rem;
+  transition: all 0.3s;
+  display: inline-block;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.buttons-list .btn-primary {
+  background: #3498db;
+  color: white;
+}
+
+.buttons-list .btn-primary:hover {
+  background: #2980b9;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(52, 152, 219, 0.3);
+}
+
+.buttons-list .btn-secondary {
+  background: #95a5a6;
+  color: white;
+}
+
+.buttons-list .btn-secondary:hover {
+  background: #7f8c8d;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(149, 165, 166, 0.3);
+}
+
+.buttons-list .btn-danger {
+  background: #e74c3c;
+  color: white;
+}
+
+.buttons-list .btn-danger:hover {
+  background: #c0392b;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(231, 76, 60, 0.3);
+}
+
 @media (max-width: 768px) {
   .banner-overlay h1 {
     font-size: 2rem;
@@ -232,6 +304,15 @@
   
   .gallery-grid {
     grid-template-columns: 1fr;
+  }
+  
+  .buttons-list {
+    flex-direction: column;
+  }
+  
+  .buttons-list .btn {
+    width: 100%;
+    max-width: 300px;
   }
 }
 
