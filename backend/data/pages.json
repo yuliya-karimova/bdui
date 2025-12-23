@@ -69,6 +69,12 @@
           "type": "promoBanner",
           "data": {},
           "hidden": false
+        },
+        {
+          "id": "block-1766502000405",
+          "type": "travelBanner",
+          "data": {},
+          "hidden": false
         }
       ]
     },
@@ -82,8 +88,14 @@
           "type": "text",
           "data": {
             "title": "Привет",
-            "content": ""
+            "content": "Содержимое текстового блока"
           }
+        },
+        {
+          "id": "block-1766502115486",
+          "type": "travelBanner",
+          "data": {},
+          "hidden": false
         }
       ]
     },

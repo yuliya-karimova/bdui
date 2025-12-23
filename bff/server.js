@@ -9,12 +9,19 @@ const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:3001';
 app.use(cors());
 app.use(express.json());
 
-// Состояние баннера, которое можно править на BFF.
-// Используется как дефолт, если с бэка пришёл пустой блок banner.
+// BFF баннеры
 const BFF_BANNER_STATE = {
   title: 'BFF Banner',
   subtitle: 'Стейт задаётся на BFF',
   imageUrl: 'https://image.slidesdocs.com/responsive-images/background/web-development-and-app-programming-with-seo-friendly-design-on-computer-powerpoint-background_8ad84ff8f9__960_540.jpg',
+  buttonText: 'Подробнее',
+  buttonLink: '/info'
+};
+
+const BFF_TRAVEL_BANNER_STATE = {
+  title: 'Travel Banner',
+  subtitle: 'Мой кастомный баннер на основе стандартного баннера',
+  imageUrl: 'https://img.freepik.com/free-photo/person-traveling-enjoying-their-vacation_23-2151383050.jpg?semt=ais_hybrid&w=740',
   buttonText: 'Подробнее',
   buttonLink: '/info'
 };
@@ -58,6 +65,11 @@ app.get('/api/page/:slug?', async (req, res) => {
           // promoBanner мапится на фронтовый banner, данные приходят с бэка
           type: 'banner',
           ...BFF_BANNER_STATE
+        }),
+        ...(block.type === 'travelBanner' && {
+          // travelBanner мапится на фронтовый banner, данные приходят с бэка
+          type: 'banner',
+          ...BFF_TRAVEL_BANNER_STATE
         }),
         ...(block.type === 'cards' && {
           title: block.data.title,
