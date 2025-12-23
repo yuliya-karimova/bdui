@@ -124,26 +124,6 @@ app.get('/api/pages/root', async (req, res) => {
   }
 });
 
-// function applyDefaultBlockData(page) {
-//   if (!page || !page.blocks) return page;
-//   return {
-//     ...page,
-//     blocks: page.blocks.map(block => {
-//       const defaults = DEFAULT_BLOCK_DATA[block.type];
-//       if (defaults) {
-//         return {
-//           ...block,
-//           data: {
-//             ...defaults,
-//             ...(block.data || {})
-//           }
-//         };
-//       }
-//       return block;
-//     })
-//   };
-// }
-
 // Получить страницу по slug
 app.get('/api/pages/:slug', async (req, res) => {
   try {
