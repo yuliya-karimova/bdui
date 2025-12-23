@@ -26,6 +26,14 @@ const BFF_TRAVEL_BANNER_STATE = {
   buttonLink: '/info'
 };
 
+const BFF_NEW_YEAR_BANNER_STATE = {
+  title: 'New Year Banner',
+  subtitle: 'Мой кастомный баннер на основе стандартного баннера',
+  imageUrl: 'https://img.goodfon.ru/wallpaper/nbig/7/2d/zima-sneg-ukrasheniia-shary-elka-novyi-god-rozhdestvo-new--2.webp',
+  buttonText: 'Подробнее',
+  buttonLink: '/info'
+};
+
 // Получить страницу по slug (оптимизированная версия для фронтенда)
 app.get('/api/page/:slug?', async (req, res) => {
   try {
@@ -70,6 +78,11 @@ app.get('/api/page/:slug?', async (req, res) => {
           // travelBanner мапится на фронтовый banner, данные приходят с бэка
           type: 'banner',
           ...BFF_TRAVEL_BANNER_STATE
+        }),
+        ...(block.type === 'newYearBanner' && {
+          // newYearBanner мапится на фронтовый banner, данные приходят с бэка
+          type: 'banner',
+          ...BFF_NEW_YEAR_BANNER_STATE
         }),
         ...(block.type === 'cards' && {
           title: block.data.title,

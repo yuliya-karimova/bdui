@@ -96,6 +96,12 @@
           "type": "travelBanner",
           "data": {},
           "hidden": false
+        },
+        {
+          "id": "block-1766502371822",
+          "type": "newYearBanner",
+          "data": {},
+          "hidden": false
         }
       ]
     },
